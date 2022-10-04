@@ -37,10 +37,13 @@ def getRecordings():
     recordings.extend(recordings_data['meetings'])
     # print(json.dumps(recordings_data, indent=2))
     download_animation(response, FOLDER+'response.txt')
-    print(len(recordings))
+    print('- - - - -')
+    # print(len(recordings))
     parseRecordings()
+    print(str(len(downloads)) + " file(s) to download:")
     for download in downloads:
-        print(download['file_name']);
+        print(download['file_name'])
+    print("- - - - -")
 
 def parseRecordings():
     for i, recording in enumerate(recordings):
@@ -68,7 +71,7 @@ def parseRecordings():
 
 def convertGMT(recordTime):
     gmt = time.strptime(recordTime,"%Y-%m-%dT%H:%M:%SZ")
-    localTime = time.strftime('%d%b%Y_%H:%M',time.localtime(calendar.timegm(gmt)))
+    localTime = time.strftime('%d%b%Y_%I%M%p',time.localtime(calendar.timegm(gmt)))
     return localTime
 
 def download_animation(res, name):
@@ -78,7 +81,7 @@ def download_animation(res, name):
     block_size = 32 * 1024  # 32 Kibibytes
 
     # create TQDM progress bar
-    t = tqdm(total=total_size, unit='iB', unit_scale=True, colour='#fcba03')
+    t = tqdm(total=total_size, unit='iB', unit_scale=True)
     try:
         with open(name, 'wb') as fd:
             for chunk in res.iter_content(block_size):
@@ -97,5 +100,30 @@ def download_files():
         response = requests.get(download['download_url'], stream=True)
         download_animation(response, FOLDER+download['file_name'])
 
+def deleteRecordings():
+    headers = {
+        'authorization': 'Bearer ' + generateToken(),
+        'content-type': 'application/json',
+    }
+
+    print('- - - - -')
+    print(str(len(recordings)) + " cloud recording(s) to delete:")
+    for recording in recordings:
+        print("meet: " + str(recording['id']))
+    print('- - - - -')
+
+
+    for i, recording in enumerate(recordings):
+        meetingId = str(recording['id'])
+        file_name = recording['topic'].strip() + "_" + convertGMT(recording['start_time'])
+        response = requests.delete(API_EP + "/meetings/" + meetingId + "/recordings", headers=headers)
+        if (response.status_code == 200 or response.status_code == 204):
+            print("meet: " + meetingId + " | response: " + str(response.status_code))
+            print(file_name + " | meet:" + meetingId + " | cloud recording moved to trash.")
+        else:
+            print("meet: " + meetingId + " | response: " + str(response.status_code))
+            response.raise_for_status()
+
 getRecordings()
 download_files()
+deleteRecordings()
