@@ -6,11 +6,13 @@ import os
 from tqdm import tqdm
 import time
 import calendar
+import datetime
 
 # Extract and set API key and secret key
 conf = yaml.load(open('login.yml'), Loader=yaml.FullLoader)
 API_KEY = conf['zoom_api']['key']
 API_SEC = conf['zoom_api']['secret']
+quest_iterated = False
 if not os.path.exists('downloads'):
     os.makedirs('downloads')
 
@@ -32,21 +34,27 @@ def getRecordings():
         'authorization': 'Bearer ' + generateToken(),
         'content-type': 'application/json',
     }
-    response = requests.get(API_EP+'/users/me/recordings', headers=headers)
+    fromdate = datetime.date.today() - datetime.timedelta(days=30)
+    response = requests.get(API_EP+'/users/me/recordings', headers=headers, params={'from':fromdate})
     recordings_data = response.json()
     recordings.extend(recordings_data['meetings'])
     # print(json.dumps(recordings_data, indent=2))
     download_animation(response, FOLDER+'response.txt')
     print('- - - - -')
-    # print(len(recordings))
     parseRecordings()
     print(str(len(downloads)) + " file(s) to download:")
     for download in downloads:
         print(download['file_name'])
     print("- - - - -")
 
+def incrementCounter():
+    if (quest_iterated):
+        conf['iterations']['quest'] += 1
+        yaml.dump(conf, open('login.yml','w'))
+
 def parseRecordings():
     for i, recording in enumerate(recordings):
+        tempDownloads = []
         for download in recording['recording_files']:
             file_type = download['file_type']
             file_extension = download['file_extension']
@@ -58,9 +66,9 @@ def parseRecordings():
             else:
                 recording_type = download['file_type']
             download_url = download['download_url'] + "?access_token=" + generateToken()
-            start_date_time = convertGMT(recording['start_time'])
+            start_date_time = convertGMT(download['recording_start'])
             file_name = recording['topic'].strip() + '_' + start_date_time + '.' + file_extension.lower()
-            downloads.append({
+            tempDownloads.append({
                 'recording_id': recording_id,
                 'recording_type': recording_type, 
                 'file_type': file_type, 
@@ -68,6 +76,43 @@ def parseRecordings():
                 'file_name': file_name, 
                 'download_url': download_url
             })
+        copyToMaster(tempDownloads)
+    sortList(downloads)
+
+def copyToMaster(temparr):
+    sortList(temparr)
+    if (len(temparr) > 3):
+        appendParts(temparr)
+    for download in temparr:
+        downloads.append(download)
+
+def sortList(temparr):
+    # To return a new list, use the sorted() built-in function...
+    # newlist = sorted(temparr, key=lambda x: x['file_name'], reverse=False)
+    temparr.sort(key=lambda x: x['file_name'], reverse=False)
+
+def appendParts(temparr):
+    uniqueNames = []
+    for download in temparr:
+        tempname = download['file_name'][:-4]
+        if tempname not in uniqueNames:
+            uniqueNames.append(tempname)
+    
+    if len(uniqueNames) > 1:
+        for i,unique in enumerate(uniqueNames):
+            for download in temparr:
+                tempname = download['file_name'][:-4]
+                if (unique == tempname):
+                    splitName = download['file_name'].split('_')
+                    match splitName[0]:
+                        case "Qur`an Quest":
+                            splitName.insert(1,str(conf['iterations']['quest']))
+                            splitName.insert(2,"part"+str(i+1))
+                            global quest_iterated 
+                            quest_iterated= True
+                        case _:
+                            splitName.insert(1,"part"+str(i+1))
+                    download['file_name'] = '_'.join(splitName)
 
 def convertGMT(recordTime):
     gmt = time.strptime(recordTime,"%Y-%m-%dT%H:%M:%SZ")
@@ -112,7 +157,6 @@ def deleteRecordings():
         print("meet: " + str(recording['id']))
     print('- - - - -')
 
-
     for i, recording in enumerate(recordings):
         meetingId = str(recording['id'])
         file_name = recording['topic'].strip() + "_" + convertGMT(recording['start_time'])
@@ -126,4 +170,7 @@ def deleteRecordings():
 
 getRecordings()
 download_files()
-deleteRecordings()
+# deleteRecordings()
+
+# Delete .txt downloads
+# fix sorting logic: sort by date, helps with auto increment
