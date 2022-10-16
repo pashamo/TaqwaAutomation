@@ -1,3 +1,7 @@
+# Script to get all recordings using zoom api
+# option to get default recordings(today)
+# option to get recordings for a duration(30 days)
+
 import jwt
 import requests
 import json
