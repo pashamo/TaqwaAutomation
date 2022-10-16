@@ -177,7 +177,7 @@ def deleteRecordings(): # Delete(move to trash) all cloud recordings
         else:
             print("meet: " + meetingId + " | response: " + str(response.status_code))
             response.raise_for_status()
-        time.sleep(0.25)
+        time.sleep(5)
 
 def printDownloads(): # utility to print filenames for downloading
     print('- - - - -')
