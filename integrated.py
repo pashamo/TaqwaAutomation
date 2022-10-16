@@ -48,14 +48,18 @@ def getRecordings():
     print("- - - - -")
 
 def incrementCounter():
+    global quest_iterated
     if (quest_iterated):
         conf['iterations']['quest'] += 1
         yaml.dump(conf, open('login.yml','w'))
+        quest_iterated = False
 
 def parseRecordings():
     for i, recording in enumerate(recordings):
         tempDownloads = []
         for download in recording['recording_files']:
+            if (download['file_type'] == "CHAT"):
+                continue
             file_type = download['file_type']
             file_extension = download['file_extension']
             recording_id = download['id']
@@ -113,6 +117,7 @@ def appendParts(temparr):
                         case _:
                             splitName.insert(1,"part"+str(i+1))
                     download['file_name'] = '_'.join(splitName)
+            incrementCounter()
 
 def convertGMT(recordTime):
     gmt = time.strptime(recordTime,"%Y-%m-%dT%H:%M:%SZ")
@@ -169,7 +174,7 @@ def deleteRecordings():
             response.raise_for_status()
 
 getRecordings()
-download_files()
+# download_files()
 # deleteRecordings()
 
 # Delete .txt downloads

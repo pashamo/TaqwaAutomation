@@ -5,6 +5,7 @@ import yaml
 import time
 import calendar
 import datetime
+import os
 
 API_EP = 'https://api.zoom.us/v2' # Use for API Endpoint
 
@@ -19,6 +20,9 @@ print(QUEST)
 
 documents = yaml.dump(conf,open('login.yml', 'w'))
 print(documents)
+
+if not os.path.exists('downloads'):
+    os.makedirs('downloads')
 
 def generateToken():
     token = jwt.encode(
@@ -48,4 +52,4 @@ def getRecordingsMonth():
     open("downloads/month_response.txt", "wb").write(r.content)
 
 getRecordingsDef()
-# getRecordingsMonth()
+getRecordingsMonth()
