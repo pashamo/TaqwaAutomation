@@ -1,5 +1,4 @@
-dateutils
-python-dateutil
 requests
 tqdm
 pyyaml
+pyjwt

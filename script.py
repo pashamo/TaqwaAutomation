@@ -1,18 +1,11 @@
-"""
-TODO
-fix parseRecordings: too many cascading redundancies
-fix sort functions: too many redundancies
-"""
-
 import jwt
 import requests
-import json
 import yaml
 import os
-from tqdm import tqdm
 import time
 import calendar
 import datetime
+from tqdm import tqdm
 
 # Extract and set API key and secret key
 conf = yaml.load(open('login.yml'), Loader=yaml.FullLoader)
