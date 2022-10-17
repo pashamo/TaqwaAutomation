@@ -27,7 +27,11 @@ def generateToken(): # generate JWT with HS256 algorithm, as per zoom api docs
         API_SEC,
         algorithm='HS256'
     )
-    return token.decode('utf-8')
+    
+    try:
+        return token.decode('utf-8')
+    except AttributeError:
+        return token
 
 def getRecordings(): # access list of recordings using zoom recordings api
     headers = {
