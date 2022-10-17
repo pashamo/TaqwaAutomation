@@ -1,3 +1,6 @@
+# Script to download zoom cloud recordings
+# script will not work as links are hard coded for a recording which is deleted
+
 import jwt
 import requests
 import json
