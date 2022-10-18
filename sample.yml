@@ -1,10 +1,15 @@
 class_names:
   abc: Inheritence - Session
-  sahih: 'Bukhari - Book of Knowledge - Lesson '
+  ark: ARK
+  quest: Qur`anQuest
+  quill: QUILL
+  sahih: Bukhari - Book of Knowledge - Lesson
 iterations:
-  ark: 1
-  quest: 211
-  quill: 1
+  abc: 100
+  ark: 200
+  quest: 300
+  quill: 400
+  sahih: 500
 zoom_api:
   key: ''
   secret: ''

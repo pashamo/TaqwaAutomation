@@ -11,9 +11,11 @@ from tqdm import tqdm
 conf = yaml.load(open('login.yml'), Loader=yaml.FullLoader)
 API_KEY = conf['zoom_api']['key']
 API_SEC = conf['zoom_api']['secret']
+abc_iterated = False
 ark_iterated = False
 quest_iterated = False
 quill_iterated = False
+sahih_iterated = False
 if not os.path.exists('downloads'):
     os.makedirs('downloads')
 
@@ -51,10 +53,16 @@ def getRecordings(): # access list of recordings using zoom recordings api
     printDownloads()
 
 def incrementCounter(): # increment QUEST counter and update yml
+    global abc_iterated
     global ark_iterated
     global quest_iterated
     global quill_iterated
+    global sahih_iterated
     
+    if (abc_iterated):
+        conf['iterations']['abc'] += 1
+        yaml.dump(conf, open('login.yml','w'))
+        abc_iterated = False
     if (ark_iterated):
         conf['iterations']['ark'] += 1
         yaml.dump(conf, open('login.yml','w'))
@@ -67,6 +75,10 @@ def incrementCounter(): # increment QUEST counter and update yml
         conf['iterations']['quill'] += 1
         yaml.dump(conf, open('login.yml','w'))
         quill_iterated = False
+    if (sahih_iterated):
+        conf['iterations']['sahih'] += 1
+        yaml.dump(conf, open('login.yml','w'))
+        sahih_iterated = False
 
 def parseRecordings():
     for i, recording in enumerate(recordings):
@@ -166,18 +178,26 @@ def appendParts(temparr): # append parts for a subset of downloads
             }
             if (unique == tempname):
                 splitName = download['file_name'].split('_')
-                if (splitName[0] == conf['class_names']['ark']):
-                    splitName.insert(1,str(conf['iterations']['ark']))
+                if (splitName[0] == conf['class_names']['abc']):
+                    splitName[0] = splitName[0] + str(conf['iterations']['abc'])
+                    global abc_iterated 
+                    abc_iterated= True
+                elif (splitName[0] == conf['class_names']['ark']):
+                    splitName[0] = splitName[0] + str(conf['iterations']['ark'])
                     global ark_iterated 
                     ark_iterated= True
                 elif (splitName[0] == conf['class_names']['quest']):
-                    splitName.insert(1,str(conf['iterations']['quest']))
+                    splitName[0] = splitName[0] + str(conf['iterations']['quest'])
                     global quest_iterated 
                     quest_iterated= True
                 elif (splitName[0] == conf['class_names']['quill']):
-                    splitName.insert(1,str(conf['iterations']['quill']))
+                    splitName[0] = splitName[0] + str(conf['iterations']['quill'])
                     global quill_iterated 
                     quill_iterated= True
+                elif (splitName[0] == conf['class_names']['sahih']):
+                    splitName[0] = splitName[0] + str(conf['iterations']['sahih'])
+                    global sahih_iterated 
+                    sahih_iterated= True
                 else:
                     if len(uniqueNames) > 1:
                         splitName.insert(1,"part"+str(i+1))
@@ -254,8 +274,8 @@ def printRecordings(): # utility to print cloud recordings for deletion
 
 def main():
     getRecordings()
-    # download_files()
-    # deleteRecordings()
+    download_files()
+    deleteRecordings()
 
 if __name__ == "__main__":
     main()
