@@ -145,7 +145,6 @@ def getMeetingName(meeting):
 
 def copyToMaster(arr): # copy recordings for a meeting to the master list
     sortList(arr)
-    # if (len(arr) >= 4):
     appendParts(arr)
     for download in arr:
         downloads.append(download)
@@ -170,7 +169,6 @@ def appendParts(temparr): # append parts for a subset of downloads
             uniqueNames.append(tempname)
     
     for i,unique in enumerate(uniqueNames):
-        print(unique)
         for download in temparr:
             tempname = {
                 'name': download['file_name'][:-4],
