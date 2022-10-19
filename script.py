@@ -11,7 +11,11 @@ from tqdm import tqdm
 conf = yaml.load(open('login.yml'), Loader=yaml.FullLoader)
 API_KEY = conf['zoom_api']['key']
 API_SEC = conf['zoom_api']['secret']
+abc_iterated = False
+ark_iterated = False
 quest_iterated = False
+quill_iterated = False
+sahih_iterated = False
 if not os.path.exists('downloads'):
     os.makedirs('downloads')
 
@@ -49,15 +53,38 @@ def getRecordings(): # access list of recordings using zoom recordings api
     printDownloads()
 
 def incrementCounter(): # increment QUEST counter and update yml
+    global abc_iterated
+    global ark_iterated
     global quest_iterated
+    global quill_iterated
+    global sahih_iterated
+    
+    if (abc_iterated):
+        conf['iterations']['abc'] += 1
+        yaml.dump(conf, open('login.yml','w'))
+        abc_iterated = False
+    if (ark_iterated):
+        conf['iterations']['ark'] += 1
+        yaml.dump(conf, open('login.yml','w'))
+        ark_iterated = False
     if (quest_iterated):
         conf['iterations']['quest'] += 1
         yaml.dump(conf, open('login.yml','w'))
         quest_iterated = False
+    if (quill_iterated):
+        conf['iterations']['quill'] += 1
+        yaml.dump(conf, open('login.yml','w'))
+        quill_iterated = False
+    if (sahih_iterated):
+        conf['iterations']['sahih'] += 1
+        yaml.dump(conf, open('login.yml','w'))
+        sahih_iterated = False
 
 def parseRecordings():
     for i, recording in enumerate(recordings):
         tempDownloads = []
+        if (not isWhiteListedMeeting(recording['topic'].strip())):
+            continue
         for download in recording['recording_files']:
             if (download['file_type'] == "CHAT"): # Avoid .txt files
                 continue
@@ -72,7 +99,8 @@ def parseRecordings():
                 recording_type = download['file_type']
             download_url = download['download_url'] + "?access_token=" + generateToken()
             start_date_time = convertGMT(download['recording_start'])
-            file_name = recording['topic'].strip() + '_' + start_date_time + '.' + file_extension.lower()
+            meeting_name = getMeetingName(recording['topic'].strip())
+            file_name = meeting_name + '_' + start_date_time.split('_')[0] + '.' + file_extension.lower()
             tempDownloads.append({
                 'recording_id': recording_id,
                 'recording_type': recording_type, 
@@ -85,10 +113,39 @@ def parseRecordings():
         copyToMaster(tempDownloads)
     sortList(downloads)
 
+def isWhiteListedMeeting(meeting):
+    match meeting.lower():
+        case "abc":
+            return True
+        case "ark":
+            return True
+        case "quill":
+            return True
+        case "qur`an quest":
+            return True
+        case "the sahih":
+            return True
+        case _:
+            return False
+
+def getMeetingName(meeting):
+    match meeting.lower():
+        case "abc":
+            return conf['class_names']['abc']
+        case "ark":
+            return conf['class_names']['ark']
+        case "quill":
+            return conf['class_names']['quill']
+        case "qur`an quest":
+            return conf['class_names']['quest']
+        case "the sahih":
+            return conf['class_names']['sahih']
+        case _:
+            return 'Unavailable'
+
 def copyToMaster(arr): # copy recordings for a meeting to the master list
     sortList(arr)
-    if (len(arr) >= 4):
-        appendParts(arr)
+    appendParts(arr)
     for download in arr:
         downloads.append(download)
 
@@ -104,25 +161,46 @@ def sortListByTime2(arr): # - Use this after recordings are extracted
 def appendParts(temparr): # append parts for a subset of downloads
     uniqueNames = []
     for download in temparr:
-        tempname = download['file_name'][:-4]
+        tempname = {
+            'name': download['file_name'][:-4],
+            'date': download['start_date_time']
+        }
         if tempname not in uniqueNames:
             uniqueNames.append(tempname)
     
-    if len(uniqueNames) > 1:
-        for i,unique in enumerate(uniqueNames):
-            for download in temparr:
-                tempname = download['file_name'][:-4]
-                if (unique == tempname):
-                    splitName = download['file_name'].split('_')
-                    match splitName[0]:
-                        case "Qur`an Quest":
-                            splitName.insert(1,str(conf['iterations']['quest']))
-                            splitName.insert(2,"part"+str(i+1))
-                            global quest_iterated 
-                            quest_iterated= True
-                        case _:
-                            splitName.insert(1,"part"+str(i+1))
-                    download['file_name'] = '_'.join(splitName)
+    for i,unique in enumerate(uniqueNames):
+        for download in temparr:
+            tempname = {
+                'name': download['file_name'][:-4],
+                'date': download['start_date_time']
+            }
+            if (unique == tempname):
+                splitName = download['file_name'].split('_')
+                if (splitName[0] == conf['class_names']['abc']):
+                    splitName[0] = splitName[0] + str(conf['iterations']['abc'])
+                    global abc_iterated 
+                    abc_iterated= True
+                elif (splitName[0] == conf['class_names']['ark']):
+                    splitName[0] = splitName[0] + str(conf['iterations']['ark'])
+                    global ark_iterated 
+                    ark_iterated= True
+                elif (splitName[0] == conf['class_names']['quest']):
+                    splitName[0] = splitName[0] + str(conf['iterations']['quest'])
+                    global quest_iterated 
+                    quest_iterated= True
+                elif (splitName[0] == conf['class_names']['quill']):
+                    splitName[0] = splitName[0] + str(conf['iterations']['quill'])
+                    global quill_iterated 
+                    quill_iterated= True
+                elif (splitName[0] == conf['class_names']['sahih']):
+                    splitName[0] = splitName[0] + str(conf['iterations']['sahih'])
+                    global sahih_iterated 
+                    sahih_iterated= True
+                else:
+                    if len(uniqueNames) > 1:
+                        splitName.insert(1,"part"+str(i+1))
+
+                download['file_name'] = ' - '.join(splitName)
         incrementCounter()
 
 def convertGMT(recordTime): # convert GMT to local(eastern) time
