@@ -1,15 +1,21 @@
-class_names:
-  abc: Inheritence - Session
-  ark: ARK
-  quest: Qur`anQuest
-  quill: QUILL
-  sahih: Bukhari - Book of Knowledge - Lesson
-iterations:
-  abc: 100
-  ark: 200
-  quest: 300
-  quill: 400
-  sahih: 500
-zoom_api:
-  key: ''
-  secret: ''
+meetings:
+  abc:
+    file_name: Inheritence - Session
+    iteration: 100
+  ark:
+    file_name: ARK
+    iteration: 200
+  quest:
+    file_name: Qur`anQuest
+    iteration: 300
+  quill:
+    file_name: QUILL
+    iteration: 400
+  sahih:
+    file_name: Bukhari - Book of Knowledge - Lesson
+    iteration: 500
+network:
+  zoom_api:
+    endpoint: https://api.zoom.us/v2
+    key: ''
+    secret: ''
