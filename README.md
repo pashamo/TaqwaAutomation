@@ -10,7 +10,7 @@ Project is created with:
 To run this project:
 
 1. Install python
-2. Rename `sample.yml` to `login.yml`
+2. Rename `sample.yml` to `config.yml`
     * Enter your zoom api credentials
 3. Install the dependencies and run script:
 ```
