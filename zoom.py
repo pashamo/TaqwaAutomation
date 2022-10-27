@@ -8,22 +8,23 @@ import datetime
 from tqdm import tqdm
 
 # Extract and set API key and secret key
-conf = yaml.load(open('login.yml'), Loader=yaml.FullLoader)
-API_KEY = conf['zoom_api']['key']
-API_SEC = conf['zoom_api']['secret']
+config = yaml.load(open('config.yml'), Loader=yaml.FullLoader)
+meetings_conf = config['meetings']
+network_conf = config['network']
+API_KEY = network_conf['zoom_api']['key']
+API_SEC = network_conf['zoom_api']['secret']
+API_EP = network_conf['zoom_api']['endpoint'] # Use for API Endpoint
+FOLDER = 'downloads/'
 abc_iterated = False
 ark_iterated = False
 quest_iterated = False
 quill_iterated = False
 sahih_iterated = False
-if not os.path.exists('downloads'):
-    os.makedirs('downloads')
-
-API_EP = 'https://api.zoom.us/v2' # Use for API Endpoint
-FOLDER = 'downloads/'
 recordings = []
 downloads = []
 
+if not os.path.exists('downloads'): # Create folder to download files if necessary
+    os.makedirs('downloads')
 
 def generateToken(): # generate JWT with HS256 algorithm, as per zoom api docs
     token = jwt.encode(
@@ -31,11 +32,7 @@ def generateToken(): # generate JWT with HS256 algorithm, as per zoom api docs
         API_SEC,
         algorithm='HS256'
     )
-    
-    try:
-        return token.decode('utf-8')
-    except AttributeError:
-        return token
+    return token
 
 def getRecordings(): # access list of recordings using zoom recordings api
     headers = {
@@ -47,10 +44,14 @@ def getRecordings(): # access list of recordings using zoom recordings api
     recordings_data = response.json()
     recordings.extend(recordings_data['meetings'])
     sortListByTime2(recordings)
-    # print(json.dumps(recordings_data, indent=2))
-    download_animation(response, FOLDER+'response.txt')
+    # print(json.dumps(recordings, indent=2))
+    download_animation(response, FOLDER+'zoom_log.txt')
     parseRecordings()
     printDownloads()
+    updateConfigFile()
+
+def updateConfigFile():
+    yaml.dump(config, open('config.yml','w'))
 
 def incrementCounter(): # increment QUEST counter and update yml
     global abc_iterated
@@ -60,24 +61,19 @@ def incrementCounter(): # increment QUEST counter and update yml
     global sahih_iterated
     
     if (abc_iterated):
-        conf['iterations']['abc'] += 1
-        yaml.dump(conf, open('login.yml','w'))
+        meetings_conf['abc']['iteration'] += 1
         abc_iterated = False
     if (ark_iterated):
-        conf['iterations']['ark'] += 1
-        yaml.dump(conf, open('login.yml','w'))
+        meetings_conf['ark']['iteration'] += 1
         ark_iterated = False
     if (quest_iterated):
-        conf['iterations']['quest'] += 1
-        yaml.dump(conf, open('login.yml','w'))
+        meetings_conf['quest']['iteration'] += 1
         quest_iterated = False
     if (quill_iterated):
-        conf['iterations']['quill'] += 1
-        yaml.dump(conf, open('login.yml','w'))
+        meetings_conf['quill']['iteration'] += 1
         quill_iterated = False
     if (sahih_iterated):
-        conf['iterations']['sahih'] += 1
-        yaml.dump(conf, open('login.yml','w'))
+        meetings_conf['sahih']['iteration'] += 1
         sahih_iterated = False
 
 def parseRecordings():
@@ -131,69 +127,68 @@ def isWhiteListedMeeting(meeting):
 def getMeetingName(meeting):
     match meeting.lower():
         case "abc":
-            return conf['class_names']['abc']
+            return meetings_conf['abc']['file_name']
         case "ark":
-            return conf['class_names']['ark']
+            return meetings_conf['ark']['file_name']
         case "quill":
-            return conf['class_names']['quill']
+            return meetings_conf['quill']['file_name']
         case "qur`an quest":
-            return conf['class_names']['quest']
+            return meetings_conf['quest']['file_name']
         case "the sahih":
-            return conf['class_names']['sahih']
+            return meetings_conf['sahih']['file_name']
         case _:
             return 'Unavailable'
 
 def copyToMaster(arr): # copy recordings for a meeting to the master list
     sortList(arr)
     appendParts(arr)
-    for download in arr:
-        downloads.append(download)
+    downloads.extend(arr)
 
 def sortList(arr): # -
     arr.sort(key=lambda x: x['file_name'], reverse=False)
 
-def sortListByTime(arr): # - Use these after downloads are extracted
+def sortListByTime(arr): # - Use this after downloads are extracted
     arr.sort(key=lambda x: time.strptime(x['start_date_time'], '%d%b%Y_%I%M%p'), reverse=False)
 
 def sortListByTime2(arr): # - Use this after recordings are extracted
     arr.sort(key=lambda x: time.strptime(x['start_time'],"%Y-%m-%dT%H:%M:%SZ"), reverse=False)
     
-def appendParts(temparr): # append parts for a subset of downloads
+def appendParts(arr): # append parts for a subset of downloads
     uniqueNames = []
-    for download in temparr:
+    for download in arr:
         tempname = {
             'name': download['file_name'][:-4],
             'date': download['start_date_time']
-        }
+        } # make dictionary with filenames without extension
         if tempname not in uniqueNames:
             uniqueNames.append(tempname)
     
     for i,unique in enumerate(uniqueNames):
-        for download in temparr:
+        for download in arr:
             tempname = {
                 'name': download['file_name'][:-4],
                 'date': download['start_date_time']
             }
             if (unique == tempname):
                 splitName = download['file_name'].split('_')
-                if (splitName[0] == conf['class_names']['abc']):
-                    splitName[0] = splitName[0] + str(conf['iterations']['abc'])
+                if (splitName[0] == meetings_conf['abc']['file_name']):
+                    splitName[0] = splitName[0] + str(meetings_conf['abc']['iteration'])
                     global abc_iterated 
                     abc_iterated= True
-                elif (splitName[0] == conf['class_names']['ark']):
-                    splitName[0] = splitName[0] + str(conf['iterations']['ark'])
+                elif (splitName[0] == meetings_conf['ark']['file_name']):
+                    splitName[0] = splitName[0] + str(meetings_conf['ark']['iteration'])
                     global ark_iterated 
                     ark_iterated= True
-                elif (splitName[0] == conf['class_names']['quest']):
-                    splitName[0] = splitName[0] + str(conf['iterations']['quest'])
+                elif (splitName[0] == meetings_conf['quest']['file_name']):
+                    splitName[0] = splitName[0] + str(meetings_conf['quest']['iteration'])
                     global quest_iterated 
                     quest_iterated= True
-                elif (splitName[0] == conf['class_names']['quill']):
-                    splitName[0] = splitName[0] + str(conf['iterations']['quill'])
+                elif (splitName[0] == meetings_conf['quill']['file_name']):
+                    splitName[0] = splitName[0] + str(meetings_conf['quill']['iteration'])
                     global quill_iterated 
                     quill_iterated= True
-                elif (splitName[0] == conf['class_names']['sahih']):
-                    splitName[0] = splitName[0] + str(conf['iterations']['sahih'])
+                elif (splitName[0] == meetings_conf['sahih']['file_name']):
+                    splitName[0] = splitName[0] + str(meetings_conf['sahih']['iteration'])
                     global sahih_iterated 
                     sahih_iterated= True
                 else:
