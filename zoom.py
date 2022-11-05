@@ -140,7 +140,7 @@ def getMeetingName(meeting):
             return 'Unavailable'
 
 def copyToMaster(arr): # copy recordings for a meeting to the master list
-    sortList(arr)
+    sortListByTime(arr)
     appendParts(arr)
     downloads.extend(arr)
 
@@ -253,7 +253,7 @@ def printDownloads(): # utility to print filenames for downloading
     print('- - - - -')
     print(str(len(downloads)) + " file(s) to download:")
     for download in downloads:
-        print(download['file_name'])
+        print(download['file_name'],"|| time:",download['start_date_time'])
         time.sleep(0.25)
     print("- - - - -")
 
