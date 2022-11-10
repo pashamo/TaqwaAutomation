@@ -2,18 +2,33 @@ meetings:
   abc:
     file_name: Inheritence - Session
     iteration: 100
+    path_audio: E:\Taqwa_Files\Taqwa_Audio
+    path_video: E:\Taqwa_Files\Taqwa_Video
   ark:
     file_name: ARK
     iteration: 200
+    path_audio: E:\Taqwa_Files\Taqwa_Audio
+    path_video: E:\Taqwa_Files\Taqwa_Video
   quest:
     file_name: Qur`anQuest
     iteration: 300
+    path_audio: E:\Taqwa_Files\Taqwa_Audio
+    path_video: E:\Taqwa_Files\Taqwa_Video
+  quest_qna:
+    file_name: Qur`anQuest - QA
+    iteration: 1
+    path_audio: E:\Taqwa_Files\Taqwa_Audio
+    path_video: E:\Taqwa_Files\Taqwa_Video
   quill:
     file_name: QUILL
     iteration: 400
+    path_audio: E:\Taqwa_Files\Taqwa_Audio
+    path_video: E:\Taqwa_Files\Taqwa_Video
   sahih:
     file_name: Bukhari - Book of Knowledge - Lesson
     iteration: 500
+    path_audio: E:\Taqwa_Files\Taqwa_Audio
+    path_video: E:\Taqwa_Files\Taqwa_Video
 network:
   zoom_api:
     endpoint: https://api.zoom.us/v2
