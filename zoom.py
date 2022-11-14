@@ -46,7 +46,7 @@ def getRecordings(): # access list of recordings using zoom recordings api
     recordings.extend(recordings_data['meetings'])
     sortListByTime2(recordings)
     # print(json.dumps(recordings, indent=2))
-    download_animation(response, FOLDER+'zoom_log.txt')
+    download_animation(response, FOLDER+'log_zoomFlow.txt')
     parseRecordings()
     printDownloads()
     updateConfigFile()
