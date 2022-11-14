@@ -18,6 +18,7 @@ FOLDER = 'downloads/'
 abc_iterated = False
 ark_iterated = False
 quest_iterated = False
+quest_qna_iterated = False
 quill_iterated = False
 sahih_iterated = False
 recordings = []
@@ -45,7 +46,7 @@ def getRecordings(): # access list of recordings using zoom recordings api
     recordings.extend(recordings_data['meetings'])
     sortListByTime2(recordings)
     # print(json.dumps(recordings, indent=2))
-    download_animation(response, FOLDER+'zoom_log.txt')
+    download_animation(response, FOLDER+'log_zoomFlow.txt')
     parseRecordings()
     printDownloads()
     updateConfigFile()
@@ -57,6 +58,7 @@ def incrementCounter(): # increment QUEST counter and update yml
     global abc_iterated
     global ark_iterated
     global quest_iterated
+    global quest_qna_iterated
     global quill_iterated
     global sahih_iterated
     
@@ -69,6 +71,9 @@ def incrementCounter(): # increment QUEST counter and update yml
     if (quest_iterated):
         meetings_conf['quest']['iteration'] += 1
         quest_iterated = False
+    if (quest_qna_iterated):
+        meetings_conf['quest_qna']['iteration'] += 1
+        quest_qna_iterated = False
     if (quill_iterated):
         meetings_conf['quill']['iteration'] += 1
         quill_iterated = False
@@ -180,9 +185,14 @@ def appendParts(arr): # append parts for a subset of downloads
                     global ark_iterated 
                     ark_iterated= True
                 elif (splitName[0] == meetings_conf['quest']['file_name']):
-                    splitName[0] = splitName[0] + str(meetings_conf['quest']['iteration'])
-                    global quest_iterated 
-                    quest_iterated= True
+                    if (i == len(uniqueNames)-1):
+                        splitName[0] = meetings_conf['quest_qna']['file_name'] + str(meetings_conf['quest_qna']['iteration'])
+                        global quest_qna_iterated
+                        quest_qna_iterated= True
+                    else:
+                        splitName[0] = splitName[0] + str(meetings_conf['quest']['iteration'])
+                        global quest_iterated 
+                        quest_iterated= True
                 elif (splitName[0] == meetings_conf['quill']['file_name']):
                     splitName[0] = splitName[0] + str(meetings_conf['quill']['iteration'])
                     global quill_iterated 
