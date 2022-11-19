@@ -16,20 +16,24 @@ meetings:
     path_video: E:\Taqwa_Files\Taqwa_Video
   quest_qna:
     file_name: Qur`anQuest - QA
-    iteration: 1
+    iteration: 400
     path_audio: E:\Taqwa_Files\Taqwa_Audio
     path_video: E:\Taqwa_Files\Taqwa_Video
   quill:
     file_name: QUILL
-    iteration: 400
+    iteration: 500
     path_audio: E:\Taqwa_Files\Taqwa_Audio
     path_video: E:\Taqwa_Files\Taqwa_Video
   sahih:
     file_name: Bukhari - Book of Knowledge - Lesson
-    iteration: 500
+    iteration: 600
     path_audio: E:\Taqwa_Files\Taqwa_Audio
     path_video: E:\Taqwa_Files\Taqwa_Video
 network:
+  vimeo_api:
+    id: ''
+    secret: ''
+    token: ''
   zoom_api:
     endpoint: https://api.zoom.us/v2
     key: ''
