@@ -5,12 +5,9 @@ import json
 import os
 
 config = yaml.load(open('config.yml'), Loader=yaml.FullLoader)
-API_TOK = config['network']['vimeo_pasha_api']['token']
-API_KEY = config['network']['vimeo_pasha_api']['id']
-API_SEC = config['network']['vimeo_pasha_api']['secret']
-# API_TOK = config['network']['vimeo_api']['token']
-# API_KEY = config['network']['vimeo_api']['id']
-# API_SEC = config['network']['vimeo_api']['secret']
+API_TOK = config['network']['vimeo_api']['token']
+API_KEY = config['network']['vimeo_api']['id']
+API_SEC = config['network']['vimeo_api']['secret']
 downloaded_files = os.listdir("./downloads")
 upload_list = []
 download_dir = "./downloads/"
@@ -24,8 +21,8 @@ client = vimeo.VimeoClient(
 def uploadQuick(video):
     global log
     uri = client.upload(download_dir+video, data={
-    'name': "###TEST###"+video[:-4],
-    'description': "###TEST###"
+    'name': video[:-4],
+    'description': video[:-4]
     })
     response = client.get(uri + '?fields=link').json()
 
@@ -50,15 +47,19 @@ def writeLog():
     fp.write(log)
     fp.close()
 
-def printUploads(): # utility to print recordings for upload
+def printUploads(videos): # utility to print recordings for upload
     print('- - - - -')
-    print(str(len(upload_list)) + " recording(s) to upload:")
-    for recording in upload_list:
+    print(str(len(videos)) + " recording(s) to upload:")
+    for recording in videos:
         print("> ",recording)
         time.sleep(0.25)
     print('- - - - -')
 
-upload_list = getVideosList()
-printUploads()
-uploadVideos(upload_list)
-writeLog()
+def main():
+    upload_list = getVideosList()
+    printUploads(upload_list)
+    uploadVideos(upload_list)
+    writeLog()
+
+if __name__ == "__main__":
+    main()
