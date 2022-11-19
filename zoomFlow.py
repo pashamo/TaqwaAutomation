@@ -46,7 +46,7 @@ def getRecordings(): # access list of recordings using zoom recordings api
     recordings.extend(recordings_data['meetings'])
     sortListByTime2(recordings)
     # print(json.dumps(recordings, indent=2))
-    download_animation(response, FOLDER+'log_zoomFlow.txt')
+    downloadAnimation(response, FOLDER+'log_zoomFlow.txt')
     parseRecordings()
     printDownloads()
     updateConfigFile()
@@ -213,7 +213,7 @@ def convertGMT(recordTime): # convert GMT to local(eastern) time
     localTime = time.strftime('%d%b%Y_%I%M%p',time.localtime(calendar.timegm(gmt)))
     return localTime
 
-def download_animation(res, name): # -
+def downloadAnimation(res, name): # -
     print('Downloading '+name+' ...')
     # total size in bytes.
     total_size = int(res.headers.get('content-length', 0))
@@ -234,10 +234,10 @@ def download_animation(res, name): # -
         print(e)
         return False
 
-def download_files(): # -
+def downloadFiles(): # -
     for download in downloads:
         response = requests.get(download['download_url'], stream=True)
-        download_animation(response, FOLDER+download['file_name'])
+        downloadAnimation(response, FOLDER+download['file_name'])
 
 def deleteRecordings(): # Delete(move to trash) all cloud recordings
     headers = {
@@ -277,8 +277,8 @@ def printRecordings(): # utility to print cloud recordings for deletion
 
 def main():
     getRecordings()
-    download_files()
-    deleteRecordings()
+    downloadFiles()
+    # deleteRecordings()
 
 if __name__ == "__main__":
     main()
