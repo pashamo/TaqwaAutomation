@@ -185,7 +185,7 @@ def appendParts(arr): # append parts for a subset of downloads
                     global ark_iterated 
                     ark_iterated= True
                 elif (splitName[0] == meetings_conf['quest']['file_name']):
-                    if (i == len(uniqueNames)-1):
+                    if (i == len(uniqueNames)-1 and len(uniqueNames) >= 2):
                         splitName[0] = meetings_conf['quest_qna']['file_name'] + str(meetings_conf['quest_qna']['iteration'])
                         global quest_qna_iterated
                         quest_qna_iterated= True
