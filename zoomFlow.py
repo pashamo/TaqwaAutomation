@@ -254,7 +254,6 @@ def deleteRecordings(): # Delete(move to trash) all cloud recordings
     printRecordings()
 
     for i, recording in enumerate(recordings):
-
         meetingId = str(recording['id'])
         file_name = recording['topic'].strip() + "_" + convertGMT(recording['start_time'])
         response = requests.delete(API_EP + "/meetings/" + meetingId + "/recordings", headers=headers)
