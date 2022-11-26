@@ -120,6 +120,8 @@ def isWhiteListedMeeting(meeting):
             return True
         case "ark":
             return True
+        case "ark mechanics":
+            return True
         case "quill":
             return True
         case "qur`an quest":
@@ -134,6 +136,8 @@ def getMeetingName(meeting):
         case "abc":
             return meetings_conf['abc']['file_name']
         case "ark":
+            return meetings_conf['ark']['file_name']
+        case "ark mechanics":
             return meetings_conf['ark']['file_name']
         case "quill":
             return meetings_conf['quill']['file_name']
@@ -277,8 +281,8 @@ def printRecordings(): # utility to print cloud recordings for deletion
 
 def main():
     getRecordings()
-    downloadFiles()
-    deleteRecordings()
+    # downloadFiles()
+    # deleteRecordings()
 
 if __name__ == "__main__":
     main()
