@@ -281,8 +281,8 @@ def printRecordings(): # utility to print cloud recordings for deletion
 
 def main():
     getRecordings()
-    # downloadFiles()
-    # deleteRecordings()
+    downloadFiles()
+    deleteRecordings()
 
 if __name__ == "__main__":
     main()
