@@ -43,13 +43,17 @@ def getRecordings(): # access list of recordings using zoom recordings api
     fromdate = datetime.date.today() - datetime.timedelta(days=30)
     response = requests.get(API_EP+'/users/me/recordings', headers=headers, params={'from':fromdate})
     recordings_data = response.json()
-    recordings.extend(recordings_data['meetings'])
+    filtered_recordings = filterRecordings(recordings_data['meetings'])
+    recordings.extend(filtered_recordings)
     sortListByTime2(recordings)
-    # print(json.dumps(recordings, indent=2))
     downloadAnimation(response, FOLDER+'log_zoomFlow.txt')
     parseRecordings()
     printDownloads()
     updateConfigFile()
+
+def filterRecordings(recordings_list):
+    filtered_recordings = list(filter(lambda recording: isWhiteListedMeeting(recording['topic'].strip()), recordings_list))
+    return filtered_recordings
 
 def updateConfigFile():
     yaml.dump(config, open('config.yml','w'))
@@ -84,8 +88,6 @@ def incrementCounter(): # increment QUEST counter and update yml
 def parseRecordings():
     for i, recording in enumerate(recordings):
         tempDownloads = []
-        if (not isWhiteListedMeeting(recording['topic'].strip())):
-            continue
         for download in recording['recording_files']:
             if (download['file_type'] == "CHAT"): # Avoid .txt files
                 continue
