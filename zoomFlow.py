@@ -128,7 +128,7 @@ def isWhiteListedMeeting(meeting):
             return True
         case "qur`an quest":
             return True
-        case "the sahih":
+        case "the sahih: qur`an":
             return True
         case _:
             return False
@@ -145,7 +145,7 @@ def getMeetingName(meeting):
             return meetings_conf['quill']['file_name']
         case "qur`an quest":
             return meetings_conf['quest']['file_name']
-        case "the sahih":
+        case "the sahih: qur`an":
             return meetings_conf['sahih']['file_name']
         case _:
             return 'Unavailable'
