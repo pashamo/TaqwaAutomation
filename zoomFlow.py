@@ -135,7 +135,7 @@ def isWhiteListedMeeting(meeting):
             return True
         case "ramadan reflections 2023":
             return True
-        case "the sahih":
+        case "the sahih: qur`an":
             return True
         case _:
             return False
@@ -154,7 +154,7 @@ def getMeetingName(meeting):
             return meetings_conf['quest']['file_name']
         case "ramadan reflections 2023":
             return meetings_conf['ramadan']['file_name']
-        case "the sahih":
+        case "the sahih: qur`an":
             return meetings_conf['sahih']['file_name']
         case _:
             return 'Unavailable'
