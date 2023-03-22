@@ -24,9 +24,14 @@ meetings:
     iteration: 500
     path_audio: E:\Taqwa_Files\Taqwa_Audio
     path_video: E:\Taqwa_Files\Taqwa_Video
+  ramadan:
+    file_name: RR
+    iteration: 600
+    path_audio: E:\Taqwa_Files\Taqwa_Audio
+    path_video: E:\Taqwa_Files\Taqwa_Video
   sahih:
     file_name: Bukhari - Book of Knowledge - Lesson
-    iteration: 600
+    iteration: 700
     path_audio: E:\Taqwa_Files\Taqwa_Audio
     path_video: E:\Taqwa_Files\Taqwa_Video
 network:

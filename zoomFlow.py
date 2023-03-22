@@ -20,6 +20,7 @@ ark_iterated = False
 quest_iterated = False
 quest_qna_iterated = False
 quill_iterated = False
+ramadan_iterated = False
 sahih_iterated = False
 recordings = []
 downloads = []
@@ -64,6 +65,7 @@ def incrementCounter(): # increment QUEST counter and update yml
     global quest_iterated
     global quest_qna_iterated
     global quill_iterated
+    global ramadan_iterated
     global sahih_iterated
     
     if (abc_iterated):
@@ -81,6 +83,9 @@ def incrementCounter(): # increment QUEST counter and update yml
     if (quill_iterated):
         meetings_conf['quill']['iteration'] += 1
         quill_iterated = False
+    if (ramadan_iterated):
+        meetings_conf['ramadan']['iteration'] += 1
+        ramadan_iterated = False
     if (sahih_iterated):
         meetings_conf['sahih']['iteration'] += 1
         sahih_iterated = False
@@ -128,6 +133,8 @@ def isWhiteListedMeeting(meeting):
             return True
         case "qur`an quest":
             return True
+        case "ramadan reflections 2023":
+            return True
         case "the sahih: qur`an":
             return True
         case _:
@@ -145,6 +152,8 @@ def getMeetingName(meeting):
             return meetings_conf['quill']['file_name']
         case "qur`an quest":
             return meetings_conf['quest']['file_name']
+        case "ramadan reflections 2023":
+            return meetings_conf['ramadan']['file_name']
         case "the sahih: qur`an":
             return meetings_conf['sahih']['file_name']
         case _:
@@ -203,6 +212,10 @@ def appendParts(arr): # append parts for a subset of downloads
                     splitName[0] = splitName[0] + str(meetings_conf['quill']['iteration'])
                     global quill_iterated 
                     quill_iterated= True
+                elif (splitName[0] == meetings_conf['ramadan']['file_name']):
+                    splitName[0] = splitName[0] + str(meetings_conf['ramadan']['iteration'])
+                    global ramadan_iterated 
+                    ramadan_iterated= True
                 elif (splitName[0] == meetings_conf['sahih']['file_name']):
                     splitName[0] = splitName[0] + str(meetings_conf['sahih']['iteration'])
                     global sahih_iterated 
