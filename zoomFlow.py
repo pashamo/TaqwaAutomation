@@ -11,9 +11,11 @@ from tqdm import tqdm
 config = yaml.load(open('config.yml'), Loader=yaml.FullLoader)
 meetings_conf = config['meetings']
 network_conf = config['network']
-API_KEY = network_conf['zoom_api']['key']
-API_SEC = network_conf['zoom_api']['secret']
-API_EP = network_conf['zoom_api']['endpoint'] # Use for API Endpoint
+API_EP = network_conf['zoom_api']['api_endpoint'] # Use for API Endpoint
+AUTH_EP = network_conf['zoom_api']['auth_endpoint'] # Use for OAuth Endpoint
+ACCOUNT_ID = network_conf['zoom_api']['accountId']
+CLIENT_ID = network_conf['zoom_api']['clientId']
+CLIENT_SECRET = network_conf['zoom_api']['secret']
 FOLDER = 'downloads/'
 abc_iterated = False
 ark_iterated = False
@@ -28,12 +30,15 @@ downloads = []
 if not os.path.exists('downloads'): # Create folder to download files if necessary
     os.makedirs('downloads')
 
-def generateToken(): # generate JWT with HS256 algorithm, as per zoom api docs
-    token = jwt.encode(
-        {'iss': API_KEY, 'exp': time.time() + 5000},
-        API_SEC,
-        algorithm='HS256'
-    )
+def generateToken(): # get token after OAuth connection
+    response = requests.post(
+        AUTH_EP, 
+        auth=(CLIENT_ID,CLIENT_SECRET), 
+        params={
+            'grant_type': 'account_credentials', 
+            'account_id': ACCOUNT_ID})
+    token = response.json()['access_token']
+
     return token
 
 def getRecordings(): # access list of recordings using zoom recordings api
@@ -44,6 +49,7 @@ def getRecordings(): # access list of recordings using zoom recordings api
     fromdate = datetime.date.today() - datetime.timedelta(days=30)
     response = requests.get(API_EP+'/users/me/recordings', headers=headers, params={'from':fromdate})
     recordings_data = response.json()
+
     filtered_recordings = filterRecordings(recordings_data['meetings'])
     recordings.extend(filtered_recordings)
     sortListByTime2(recordings)

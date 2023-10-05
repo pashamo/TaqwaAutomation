@@ -42,6 +42,6 @@ network:
   zoom_api:
     auth_endpoint: https://zoom.us/oauth/token
     api_endpoint: https://api.zoom.us/v2
-    appId: ''
+    accountId: ''
     clientId: ''
     secret: ''
