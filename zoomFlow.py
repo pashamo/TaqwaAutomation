@@ -18,12 +18,12 @@ CLIENT_ID = network_conf['zoom_api']['clientId']
 CLIENT_SECRET = network_conf['zoom_api']['secret']
 FOLDER = 'downloads/'
 abc_iterated = False
-ark_iterated = False
-quest_iterated = False
-quest_qna_iterated = False
-quill_iterated = False
-ramadan_iterated = False
-sahih_iterated = False
+ark2024_iterated = False
+arkmechanics_iterated = False
+quill2024_iterated = False
+path114_iterated = False
+firststeps_iterated = False
+kak_iterated = False
 recordings = []
 downloads = []
 
@@ -67,34 +67,35 @@ def updateConfigFile():
 
 def incrementCounter(): # increment QUEST counter and update yml
     global abc_iterated
-    global ark_iterated
-    global quest_iterated
-    global quest_qna_iterated
-    global quill_iterated
-    global ramadan_iterated
-    global sahih_iterated
+    global ark2024_iterated
+    global arkmechanics_iterated
+    global quill2024_iterated
+    global path114_iterated
+    global firststeps_iterated
+    global kak_iterated
     
     if (abc_iterated):
         meetings_conf['abc']['iteration'] += 1
         abc_iterated = False
-    if (ark_iterated):
-        meetings_conf['ark']['iteration'] += 1
-        ark_iterated = False
-    if (quest_iterated):
-        meetings_conf['quest']['iteration'] += 1
-        quest_iterated = False
-    if (quest_qna_iterated):
-        meetings_conf['quest_qna']['iteration'] += 1
-        quest_qna_iterated = False
-    if (quill_iterated):
-        meetings_conf['quill']['iteration'] += 1
-        quill_iterated = False
-    if (ramadan_iterated):
-        meetings_conf['ramadan']['iteration'] += 1
-        ramadan_iterated = False
-    if (sahih_iterated):
-        meetings_conf['sahih']['iteration'] += 1
-        sahih_iterated = False
+    if (ark2024_iterated):
+        meetings_conf['ark2024']['iteration'] += 1
+        ark2024_iterated = False
+    if (arkmechanics_iterated):
+        meetings_conf['arkmechanics']['iteration'] += 1
+        arkmechanics_iterated = False
+    if (quill2024_iterated):
+        meetings_conf['quill2024']['iteration'] += 1
+        quill2024_iterated = False
+    if (path114_iterated):
+        meetings_conf['path114']['iteration'] += 1
+        path114_iterated = False
+    if (firststeps_iterated):
+        meetings_conf['firststeps']['iteration'] += 1
+        firststeps_iterated = False
+    if (kak_iterated):
+        meetings_conf['kak']['iteration'] += 1
+        kak_iterated = False
+
 
 def parseRecordings():
     for i, recording in enumerate(recordings):
@@ -131,17 +132,17 @@ def isWhiteListedMeeting(meeting):
     match meeting.lower():
         case "abc":
             return True
-        case "ark":
+        case "ark2024":
             return True
         case "ark mechanics":
             return True
-        case "quill":
+        case "quill2024":
             return True
-        case "qur`an quest":
+        case "path114":
             return True
-        case "ramadan reflections 2023":
+        case "first steps":
             return True
-        case "the sahih: qur`an":
+        case "khulasat al-kaydani":
             return True
         case _:
             return False
@@ -150,20 +151,20 @@ def getMeetingName(meeting):
     match meeting.lower():
         case "abc":
             return meetings_conf['abc']['file_name']
-        case "ark":
-            return meetings_conf['ark']['file_name']
+        case "ark2024":
+            return meetings_conf['ark2024']['file_name']
         case "ark mechanics":
-            return meetings_conf['ark']['file_name']
-        case "quill":
-            return meetings_conf['quill']['file_name']
-        case "qur`an quest":
-            return meetings_conf['quest']['file_name']
-        case "ramadan reflections 2023":
-            return meetings_conf['ramadan']['file_name']
-        case "the sahih: qur`an":
-            return meetings_conf['sahih']['file_name']
+            return meetings_conf['arkmechanics']['file_name']
+        case "quill2024":
+            return meetings_conf['quill2024']['file_name']
+        case "path114":
+            return meetings_conf['path114']['file_name']
+        case "first steps":
+            return meetings_conf['firststeps']['file_name']
+        case "khulasat al-kaydani":
+            return meetings_conf['kak']['file_name']
         case _:
-            return 'Unavailable'
+            return meeting
 
 def copyToMaster(arr): # copy recordings for a meeting to the master list
     sortListByTime(arr)
@@ -201,31 +202,30 @@ def appendParts(arr): # append parts for a subset of downloads
                     splitName[0] = splitName[0] + str(meetings_conf['abc']['iteration'])
                     global abc_iterated 
                     abc_iterated= True
-                elif (splitName[0] == meetings_conf['ark']['file_name']):
-                    splitName[0] = splitName[0] + str(meetings_conf['ark']['iteration'])
-                    global ark_iterated 
-                    ark_iterated= True
-                elif (splitName[0] == meetings_conf['quest']['file_name']):
-                    if (i == len(uniqueNames)-1 and len(uniqueNames) >= 2):
-                        splitName[0] = meetings_conf['quest_qna']['file_name'] + str(meetings_conf['quest_qna']['iteration'])
-                        global quest_qna_iterated
-                        quest_qna_iterated= True
-                    else:
-                        splitName[0] = splitName[0] + str(meetings_conf['quest']['iteration'])
-                        global quest_iterated 
-                        quest_iterated= True
-                elif (splitName[0] == meetings_conf['quill']['file_name']):
-                    splitName[0] = splitName[0] + str(meetings_conf['quill']['iteration'])
-                    global quill_iterated 
-                    quill_iterated= True
-                elif (splitName[0] == meetings_conf['ramadan']['file_name']):
-                    splitName[0] = splitName[0] + str(meetings_conf['ramadan']['iteration'])
-                    global ramadan_iterated 
-                    ramadan_iterated= True
-                elif (splitName[0] == meetings_conf['sahih']['file_name']):
-                    splitName[0] = splitName[0] + str(meetings_conf['sahih']['iteration'])
-                    global sahih_iterated 
-                    sahih_iterated= True
+                elif (splitName[0] == meetings_conf['ark2024']['file_name']):
+                    splitName[0] = splitName[0] + str(meetings_conf['ark2024']['iteration'])
+                    global ark2024_iterated 
+                    ark2024_iterated= True
+                elif (splitName[0] == meetings_conf['arkmechanics']['file_name']):
+                    splitName[0] = splitName[0] + str(meetings_conf['arkmechanics']['iteration'])
+                    global arkmechanics_iterated 
+                    arkmechanics_iterated= True
+                elif (splitName[0] == meetings_conf['quill2024']['file_name']):
+                    splitName[0] = splitName[0] + str(meetings_conf['quill2024']['iteration'])
+                    global quill2024_iterated 
+                    quill2024_iterated= True
+                elif (splitName[0] == meetings_conf['path114']['file_name']):
+                    splitName[0] = splitName[0] + str(meetings_conf['path114']['iteration'])
+                    global path114_iterated 
+                    path114_iterated= True
+                elif (splitName[0] == meetings_conf['firststeps']['file_name']):
+                    splitName[0] = splitName[0] + str(meetings_conf['firststeps']['iteration'])
+                    global firststeps_iterated 
+                    firststeps_iterated= True
+                elif (splitName[0] == meetings_conf['kak']['file_name']):
+                    splitName[0] = splitName[0] + str(meetings_conf['kak']['iteration'])
+                    global kak_iterated 
+                    kak_iterated= True
                 else:
                     if len(uniqueNames) > 1:
                         splitName.insert(1,"part"+str(i+1))
@@ -302,8 +302,8 @@ def printRecordings(): # utility to print cloud recordings for deletion
 
 def main():
     getRecordings()
-    downloadFiles()
-    deleteRecordings()
+    # downloadFiles()
+    # deleteRecordings()
 
 if __name__ == "__main__":
     main()
