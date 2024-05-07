@@ -4,33 +4,33 @@ meetings:
     iteration: 100
     path_audio: E:\Taqwa_Files\Taqwa_Audio
     path_video: E:\Taqwa_Files\Taqwa_Video
-  ark:
-    file_name: ARK
+  ark2024:
+    file_name: ARK2024-
     iteration: 200
     path_audio: E:\Taqwa_Files\Taqwa_Audio
     path_video: E:\Taqwa_Files\Taqwa_Video
-  quest:
-    file_name: Qur`anQuest
+  arkmechanics:
+    file_name: ARK-M-
     iteration: 300
     path_audio: E:\Taqwa_Files\Taqwa_Audio
     path_video: E:\Taqwa_Files\Taqwa_Video
-  quest_qna:
-    file_name: Qur`anQuest - QA
+  quill2024:
+    file_name: QUILL2024-
     iteration: 400
     path_audio: E:\Taqwa_Files\Taqwa_Audio
     path_video: E:\Taqwa_Files\Taqwa_Video
-  quill:
-    file_name: QUILL
+  path114:
+    file_name: PATH114-
     iteration: 500
     path_audio: E:\Taqwa_Files\Taqwa_Audio
     path_video: E:\Taqwa_Files\Taqwa_Video
-  ramadan:
-    file_name: RR
+  firststeps:
+    file_name: 1stSTEPS
     iteration: 600
     path_audio: E:\Taqwa_Files\Taqwa_Audio
     path_video: E:\Taqwa_Files\Taqwa_Video
-  sahih:
-    file_name: Bukhari - Book of Knowledge - Lesson
+  kak:
+    file_name: KhulasatAlKaydani
     iteration: 700
     path_audio: E:\Taqwa_Files\Taqwa_Audio
     path_video: E:\Taqwa_Files\Taqwa_Video
