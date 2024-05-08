@@ -19,7 +19,7 @@ CLIENT_SECRET = network_conf['zoom_api']['secret']
 FOLDER = 'downloads/'
 abc_iterated = False
 ark2024_iterated = False
-arkmechanics_iterated = False
+arkpearls_iterated = False
 quill2024_iterated = False
 path114_iterated = False
 firststeps_iterated = False
@@ -68,7 +68,7 @@ def updateConfigFile():
 def incrementCounter(): # increment QUEST counter and update yml
     global abc_iterated
     global ark2024_iterated
-    global arkmechanics_iterated
+    global arkpearls_iterated
     global quill2024_iterated
     global path114_iterated
     global firststeps_iterated
@@ -80,9 +80,9 @@ def incrementCounter(): # increment QUEST counter and update yml
     if (ark2024_iterated):
         meetings_conf['ark2024']['iteration'] += 1
         ark2024_iterated = False
-    if (arkmechanics_iterated):
-        meetings_conf['arkmechanics']['iteration'] += 1
-        arkmechanics_iterated = False
+    if (arkpearls_iterated):
+        meetings_conf['arkpearls']['iteration'] += 1
+        arkpearls_iterated = False
     if (quill2024_iterated):
         meetings_conf['quill2024']['iteration'] += 1
         quill2024_iterated = False
@@ -134,7 +134,7 @@ def isWhiteListedMeeting(meeting):
             return True
         case "ark2024":
             return True
-        case "ark mechanics":
+        case "ark pearls":
             return True
         case "quill2024":
             return True
@@ -153,8 +153,8 @@ def getMeetingName(meeting):
             return meetings_conf['abc']['file_name']
         case "ark2024":
             return meetings_conf['ark2024']['file_name']
-        case "ark mechanics":
-            return meetings_conf['arkmechanics']['file_name']
+        case "ark pearls":
+            return meetings_conf['arkpearls']['file_name']
         case "quill2024":
             return meetings_conf['quill2024']['file_name']
         case "path114":
@@ -206,10 +206,10 @@ def appendParts(arr): # append parts for a subset of downloads
                     splitName[0] = splitName[0] + str(meetings_conf['ark2024']['iteration'])
                     global ark2024_iterated 
                     ark2024_iterated= True
-                elif (splitName[0] == meetings_conf['arkmechanics']['file_name']):
-                    splitName[0] = splitName[0] + str(meetings_conf['arkmechanics']['iteration'])
-                    global arkmechanics_iterated 
-                    arkmechanics_iterated= True
+                elif (splitName[0] == meetings_conf['arkpearls']['file_name']):
+                    splitName[0] = splitName[0] + str(meetings_conf['arkpearls']['iteration'])
+                    global arkpearls_iterated 
+                    arkpearls_iterated= True
                 elif (splitName[0] == meetings_conf['quill2024']['file_name']):
                     splitName[0] = splitName[0] + str(meetings_conf['quill2024']['iteration'])
                     global quill2024_iterated 
@@ -302,8 +302,8 @@ def printRecordings(): # utility to print cloud recordings for deletion
 
 def main():
     getRecordings()
-    downloadFiles()
-    deleteRecordings()
+    # downloadFiles()
+    # deleteRecordings()
 
 if __name__ == "__main__":
     main()
