@@ -34,6 +34,11 @@ meetings:
     iteration: 700
     path_audio: E:\Taqwa_Files\Taqwa_Audio
     path_video: E:\Taqwa_Files\Taqwa_Video
+  quest:
+    file_name: SuratMaryam
+    iteration: 800
+    path_audio: E:\Taqwa_Files\Taqwa_Audio
+    path_video: E:\Taqwa_Files\Taqwa_Video
 network:
   vimeo_api:
     id: ''
