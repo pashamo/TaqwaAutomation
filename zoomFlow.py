@@ -21,6 +21,7 @@ abc_iterated = False
 ark2024_iterated = False
 arkpearls_iterated = False
 quill2024_iterated = False
+quest_iterated = False
 path114_iterated = False
 firststeps_iterated = False
 kak_iterated = False
@@ -70,6 +71,7 @@ def incrementCounter(): # increment QUEST counter and update yml
     global ark2024_iterated
     global arkpearls_iterated
     global quill2024_iterated
+    global quest_iterated
     global path114_iterated
     global firststeps_iterated
     global kak_iterated
@@ -86,6 +88,9 @@ def incrementCounter(): # increment QUEST counter and update yml
     if (quill2024_iterated):
         meetings_conf['quill2024']['iteration'] += 1
         quill2024_iterated = False
+    if (quest_iterated):
+        meetings_conf['quest']['iteration'] += 1
+        quest_iterated = False
     if (path114_iterated):
         meetings_conf['path114']['iteration'] += 1
         path114_iterated = False
@@ -138,6 +143,8 @@ def isWhiteListedMeeting(meeting):
             return True
         case "quill2024":
             return True
+        case "qur`an quest":
+            return True
         case "path114":
             return True
         case "first steps":
@@ -157,6 +164,8 @@ def getMeetingName(meeting):
             return meetings_conf['arkpearls']['file_name']
         case "quill2024":
             return meetings_conf['quill2024']['file_name']
+        case "qur`an quest":
+            return meetings_conf['quest']['file_name']
         case "path114":
             return meetings_conf['path114']['file_name']
         case "first steps":
@@ -214,6 +223,10 @@ def appendParts(arr): # append parts for a subset of downloads
                     splitName[0] = splitName[0] + str(meetings_conf['quill2024']['iteration'])
                     global quill2024_iterated 
                     quill2024_iterated= True
+                elif (splitName[0] == meetings_conf['quest']['file_name']):
+                    splitName[0] = splitName[0] + str(meetings_conf['quest']['iteration'])
+                    global quest_iterated 
+                    quest_iterated= True
                 elif (splitName[0] == meetings_conf['path114']['file_name']):
                     splitName[0] = splitName[0] + str(meetings_conf['path114']['iteration'])
                     global path114_iterated 
