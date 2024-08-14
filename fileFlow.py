@@ -49,7 +49,7 @@ def copyToDB(files, destination):
         log += "\nfile: " + file
         dest = shutil.copy(download_dir+file, destination)
         time.sleep(2)
-        log += "\nnew destination: " + dest
+        log += "\nCopied to destination: " + dest
     log += "\n"
     print(json.dumps(files,indent=2), destination)
 
@@ -59,17 +59,22 @@ def writeLog():
     fp.close()
 
 def main():
+    # Copy all videos from downloads directory to dropbox location
+    db_path = config['network']['dropbox_path']
+    all_downloads_video = filterDownloads('', 'mp4')
+    copyToDB(all_downloads_video,db_path)
+
+    time.sleep(5)
+
     for meeting in meetings_config:
         file_name = meetings_config[meeting]['file_name']
         filtered_downloads_audio = filterDownloads(file_name, 'm4a')
         filtered_downloads_video = filterDownloads(file_name, 'mp4')
         path_audio = meetings_config[meeting]['path_audio']
         path_video = meetings_config[meeting]['path_video']
-        db_path = config['network']['dropbox_path']
-        copyToDB(filtered_downloads_audio, db_path)
-        copyToDB(filtered_downloads_video, db_path)
         moveFiles(filtered_downloads_audio, path_audio)
         moveFiles(filtered_downloads_video, path_video)
+
     writeLog()
 
 if __name__ == "__main__":
