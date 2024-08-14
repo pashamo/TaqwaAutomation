@@ -274,6 +274,7 @@ def downloadAnimation(res, name): # -
 
 def downloadFiles(): # -
     for download in downloads:
+        # if (download['file_name'].find('13Aug2024') != -1):
         response = requests.get(download['download_url'], stream=True)
         downloadAnimation(response, FOLDER+download['file_name'])
 
