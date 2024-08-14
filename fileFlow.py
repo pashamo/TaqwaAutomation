@@ -37,12 +37,35 @@ def moveFiles(files, destination):
 
     print(json.dumps(files,indent=2), destination)
 
+def copyToDB(files, destination):
+    global log
+    if (not os.path.exists(destination)):
+        log += "\nERROR: path does not exist - " + destination
+        print("ERROR: path does not exist.",destination)
+        return
+    if len(files) == 0:
+        return
+    for file in files:
+        log += "\nfile: " + file
+        dest = shutil.copy(download_dir+file, destination)
+        time.sleep(2)
+        log += "\nCopied to destination: " + dest
+    log += "\n"
+    print(json.dumps(files,indent=2), destination)
+
 def writeLog():
     fp = open(download_dir+"log_fileOps.txt", 'w')
     fp.write(log)
     fp.close()
 
 def main():
+    # Copy all videos from downloads directory to dropbox location
+    db_path = config['network']['dropbox_path']
+    all_downloads_video = filterDownloads('', 'mp4')
+    copyToDB(all_downloads_video,db_path)
+
+    time.sleep(5)
+
     for meeting in meetings_config:
         file_name = meetings_config[meeting]['file_name']
         filtered_downloads_audio = filterDownloads(file_name, 'm4a')
@@ -51,6 +74,7 @@ def main():
         path_video = meetings_config[meeting]['path_video']
         moveFiles(filtered_downloads_audio, path_audio)
         moveFiles(filtered_downloads_video, path_video)
+
     writeLog()
 
 if __name__ == "__main__":
