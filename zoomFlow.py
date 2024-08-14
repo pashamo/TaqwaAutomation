@@ -24,7 +24,7 @@ quill2024_iterated = False
 quest_iterated = False
 path114_iterated = False
 firststeps_iterated = False
-kak_iterated = False
+sbonds_iterated = False
 recordings = []
 downloads = []
 
@@ -74,7 +74,7 @@ def incrementCounter(): # increment QUEST counter and update yml
     global quest_iterated
     global path114_iterated
     global firststeps_iterated
-    global kak_iterated
+    global sbonds_iterated
     
     if (abc_iterated):
         meetings_conf['abc']['iteration'] += 1
@@ -97,9 +97,9 @@ def incrementCounter(): # increment QUEST counter and update yml
     if (firststeps_iterated):
         meetings_conf['firststeps']['iteration'] += 1
         firststeps_iterated = False
-    if (kak_iterated):
-        meetings_conf['kak']['iteration'] += 1
-        kak_iterated = False
+    if (sbonds_iterated):
+        meetings_conf['sbonds']['iteration'] += 1
+        sbonds_iterated = False
 
 
 def parseRecordings():
@@ -149,10 +149,10 @@ def isWhiteListedMeeting(meeting):
             return True
         case "first steps":
             return True
-        case "khulasat al-kaydani":
+        case "sacred bonds":
             return True
         case _:
-            return False
+            return True
 
 def getMeetingName(meeting):
     match meeting.lower():
@@ -170,8 +170,8 @@ def getMeetingName(meeting):
             return meetings_conf['path114']['file_name']
         case "first steps":
             return meetings_conf['firststeps']['file_name']
-        case "khulasat al-kaydani":
-            return meetings_conf['kak']['file_name']
+        case "sacred bonds":
+            return meetings_conf['sbonds']['file_name']
         case _:
             return meeting
 
@@ -235,10 +235,10 @@ def appendParts(arr): # append parts for a subset of downloads
                     splitName[0] = splitName[0] + str(meetings_conf['firststeps']['iteration'])
                     global firststeps_iterated 
                     firststeps_iterated= True
-                elif (splitName[0] == meetings_conf['kak']['file_name']):
-                    splitName[0] = splitName[0] + str(meetings_conf['kak']['iteration'])
-                    global kak_iterated 
-                    kak_iterated= True
+                elif (splitName[0] == meetings_conf['sbonds']['file_name']):
+                    splitName[0] = splitName[0] + str(meetings_conf['sbonds']['iteration'])
+                    global sbonds_iterated 
+                    sbonds_iterated= True
                 else:
                     if len(uniqueNames) > 1:
                         splitName.insert(1,"part"+str(i+1))
@@ -315,8 +315,8 @@ def printRecordings(): # utility to print cloud recordings for deletion
 
 def main():
     getRecordings()
-    # downloadFiles()
-    # deleteRecordings()
+    downloadFiles()
+    deleteRecordings()
 
 if __name__ == "__main__":
     main()

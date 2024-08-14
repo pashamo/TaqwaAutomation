@@ -29,8 +29,8 @@ meetings:
     iteration: 600
     path_audio: E:\Taqwa_Files\Taqwa_Audio
     path_video: E:\Taqwa_Files\Taqwa_Video
-  kak:
-    file_name: KhulasatAlKaydani
+  sbonds:
+    file_name: SacredBonds
     iteration: 700
     path_audio: E:\Taqwa_Files\Taqwa_Audio
     path_video: E:\Taqwa_Files\Taqwa_Video
@@ -40,6 +40,7 @@ meetings:
     path_audio: E:\Taqwa_Files\Taqwa_Audio
     path_video: E:\Taqwa_Files\Taqwa_Video
 network:
+  dropbox_path: E:\Taqwa_Files\
   vimeo_api:
     id: ''
     secret: ''
