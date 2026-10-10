@@ -1,4 +1,4 @@
-import jwt
+import jwt 
 import requests
 import yaml
 import os
@@ -11,11 +11,16 @@ from tqdm import tqdm
 config = yaml.load(open('config.yml'), Loader=yaml.FullLoader)
 meetings_conf = config['meetings']
 network_conf = config['network']
-API_EP = network_conf['zoom_api']['api_endpoint'] # Use for API Endpoint
-AUTH_EP = network_conf['zoom_api']['auth_endpoint'] # Use for OAuth Endpoint
-ACCOUNT_ID = network_conf['zoom_api']['accountId']
-CLIENT_ID = network_conf['zoom_api']['clientId']
-CLIENT_SECRET = network_conf['zoom_api']['secret']
+# API_EP = network_conf['zoom_api']['api_endpoint'] # Use for API Endpoint
+# AUTH_EP = network_conf['zoom_api']['auth_endpoint'] # Use for OAuth Endpoint
+# ACCOUNT_ID = network_conf['zoom_api']['accountId']
+# CLIENT_ID = network_conf['zoom_api']['clientId']
+# CLIENT_SECRET = network_conf['zoom_api']['secret']
+# API_EP = network_conf['zoom_dk_api']['api_endpoint'] # Use for API Endpoint
+# AUTH_EP = network_conf['zoom_dk_api']['auth_endpoint'] # Use for OAuth Endpoint
+# ACCOUNT_ID = network_conf['zoom_dk_api']['accountId']
+# CLIENT_ID = network_conf['zoom_dk_api']['clientId']
+# CLIENT_SECRET = network_conf['zoom_dk_api']['secret']
 FOLDER = 'downloads/'
 abc_iterated = False
 ark2024_iterated = False
@@ -274,9 +279,11 @@ def downloadAnimation(res, name): # -
 
 def downloadFiles(): # -
     for download in downloads:
-        # if (download['file_name'].find('13Aug2024') != -1):
-        response = requests.get(download['download_url'], stream=True)
-        downloadAnimation(response, FOLDER+download['file_name'])
+        if (download['file_name'].find('08Oct2026') != -1):
+            # temp = download['file_name'].replace("Math/Eng","ME")
+            response = requests.get(download['download_url'], stream=True)
+            downloadAnimation(response, FOLDER+download['file_name'])
+            # downloadAnimation(response, FOLDER+temp)
 
 def deleteRecordings(): # Delete(move to trash) all cloud recordings
     headers = {
@@ -315,6 +322,35 @@ def printRecordings(): # utility to print cloud recordings for deletion
     print('- - - - -')
 
 def main():
+    global API_EP
+    global AUTH_EP
+    global ACCOUNT_ID
+    global CLIENT_ID
+    global CLIENT_SECRET
+    global FOLDER
+    global recordings
+    global downloads
+
+    API_EP = network_conf['zoom_api']['api_endpoint'] # Use for API Endpoint
+    AUTH_EP = network_conf['zoom_api']['auth_endpoint'] # Use for OAuth Endpoint
+    ACCOUNT_ID = network_conf['zoom_api']['accountId']
+    CLIENT_ID = network_conf['zoom_api']['clientId']
+    CLIENT_SECRET = network_conf['zoom_api']['secret']
+    recordings = []
+    downloads = []
+
+    getRecordings()
+    downloadFiles()
+    # deleteRecordings()
+
+    API_EP = network_conf['zoom_dk_api']['api_endpoint'] # Use for API Endpoint
+    AUTH_EP = network_conf['zoom_dk_api']['auth_endpoint'] # Use for OAuth Endpoint
+    ACCOUNT_ID = network_conf['zoom_dk_api']['accountId']
+    CLIENT_ID = network_conf['zoom_dk_api']['clientId']
+    CLIENT_SECRET = network_conf['zoom_dk_api']['secret']
+    recordings = []
+    downloads = []
+
     getRecordings()
     downloadFiles()
     deleteRecordings()

@@ -2,3 +2,6 @@ config.yml
 .DS_Store
 downloads
 __pycache__
+/Logos
+/venv
+/.venv
